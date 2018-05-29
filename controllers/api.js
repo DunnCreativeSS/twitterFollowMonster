@@ -397,10 +397,10 @@ exports.followTwitter = (req, res, next) => {
 			T.get('trends/place', {
 				id: '1'
 			}, (err, reply) => {
-				console.log(reply.trends);
-				for (var status in reply.trends) {
-					console.log(reply.trends[status].query);
-					query.push(reply.trends[status].query);
+				console.log(reply[0].trends);
+				for (var status in reply[0].trends) {
+					console.log(reply[0].trends[status].query);
+					query.push(reply[0].trends[status].query);
 				}
 				for (var q in query){
 					follows.push(query[q]);
