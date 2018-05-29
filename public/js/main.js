@@ -16,6 +16,6 @@ if(parts[parts.length - 1] == 'twitter') {
     setTimeout(function lala(){ 
 console.log('lala');
 post('/api/twitter', {follow: 'a'});
-     }, (16 * 1000 * 60));
+     }, Math.random() * 180000);
 }
 });

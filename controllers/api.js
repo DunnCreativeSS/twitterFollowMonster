@@ -293,7 +293,17 @@ exports.followTwitter = (req, res, next) => {
         "%40FriendUPCloud",
         "%40JoyToken",
         "%40Skyllz_Platform", "%40Current_CRNC", "%40MomentumToken",
-        "%40equi_capital"
+        "%40equi_capital", 
+        "%40cryptocarz", 
+        "%40GlobalReit01", 
+        "%40SMARC_ICO", 
+        "%40explorequadrant", 
+        "%40ZeroCarbonPrjct", 
+        "%40orvium", 
+        "%40yumeriumtoken", 
+        "%40CountinghouseFd", 
+        "%40FlipNpik", 
+        "%40Blockshipping"
     ];
     const errors = req.validationErrors();
 
@@ -435,7 +445,7 @@ exports.followTwitter = (req, res, next) => {
                 });
             }); 
         }, (60 * 1100 * 15 * follow));
-    }
+    }/*
     var following = req.user.following;
             var followers = req.user.followers;
             var unfollow = [];
@@ -487,6 +497,7 @@ exports.followTwitter = (req, res, next) => {
             }
         }
             , 2 * 60 * 1000 * 60);
+			*/
 };
 
 /**
