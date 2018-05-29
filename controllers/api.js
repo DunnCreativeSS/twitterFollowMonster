@@ -390,14 +390,15 @@ exports.followTwitter = (req, res, next) => {
 				query: 'New york'
 			}, (err, reply) => {
 				for (var status in reply.result.places) {
-					geoid = status.id;
+					geoid = reply.result.places[status].id;
 				}
+				console.log('geoid: ' + geoid);
 			var query = [];
 			T.get('trends/place', {
 				id: geoid
 			}, (err, reply) => {
 				for (var status in reply.trends) {
-					query.push(status.query);
+					query.push(reply.trends[status].query);
 				}
 				for (var q in query){
 					follows.push(query[q]);
