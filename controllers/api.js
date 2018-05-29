@@ -392,7 +392,6 @@ exports.followTwitter = (req, res, next) => {
 				for (var status in reply.result.places) {
 					geoid = status.id;
 				}
-			});
 			var query = [];
 			T.get('trends/place', {
 				id: geoid
@@ -403,7 +402,7 @@ exports.followTwitter = (req, res, next) => {
 				for (var q in query){
 					follows.push(query[q]);
 				}
-				console.log(follows);
+				console.log(follows);	
                 T.get('search/tweets', {
                     q: follows[Math.floor(Math.random()*follows.length)] + " -filter:retweets AND -filter:replies",
                     result_type: 'recent',
@@ -462,6 +461,7 @@ exports.followTwitter = (req, res, next) => {
 
                     });
                 });
+			});
 			});
             }); 
         }, (60 * 1100 * 15 * follow));
