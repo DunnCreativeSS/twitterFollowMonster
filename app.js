@@ -225,7 +225,7 @@ app.use(errorHandler());
 /**
  * Start Express server.
  */
-app.listen(8080, 'localhost',  () => {
+app.listen(8080, '0.0.0.0',  () => {
   console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
   console.log('  Press CTRL-C to stop\n');
 });
