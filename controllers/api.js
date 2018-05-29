@@ -385,6 +385,25 @@ exports.followTwitter = (req, res, next) => {
                 });
             
             }); 
+			var geoid = "";
+			T.get('geo/search', {
+				query: 'New york'
+			}, (err, reply) => {
+				for (var status in reply.result.places) {
+					geoid = status.id;
+				}
+			});
+			var query = [];
+			T.get('trends/place', {
+				id: geoid
+			}, (err, reply) => {
+				for (var status in reply.trends) {
+					query.push(status.query);
+				}
+				for (var q in query){
+					follows.push(query[q]);
+				}
+				console.log(follows);
                 T.get('search/tweets', {
                     q: follows[Math.floor(Math.random()*follows.length)] + " -filter:retweets AND -filter:replies",
                     result_type: 'recent',
@@ -443,6 +462,7 @@ exports.followTwitter = (req, res, next) => {
 
                     });
                 });
+			});
             }); 
         }, (60 * 1100 * 15 * follow));
     }/*
