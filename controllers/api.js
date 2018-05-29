@@ -398,6 +398,7 @@ exports.followTwitter = (req, res, next) => {
 				id: geoid
 			}, (err, reply) => {
 				for (var status in reply.trends) {
+					console.log(reply.trends[status].query);
 					query.push(reply.trends[status].query);
 				}
 				for (var q in query){
