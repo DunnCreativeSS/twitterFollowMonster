@@ -395,7 +395,7 @@ exports.followTwitter = (req, res, next) => {
 				console.log('geoid: ' + geoid);
 			var query = [];
 			T.get('trends/place', {
-				id: geoid
+				id: parseFloat(geoid)
 			}, (err, reply) => {
 				console.log(reply);
 				for (var status in reply.trends) {
