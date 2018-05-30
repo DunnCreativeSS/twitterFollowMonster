@@ -386,13 +386,6 @@ exports.followTwitter = (req, res, next) => {
             
             }); 
 			var geoid = "";
-			T.get('geo/search', {
-				query: 'New york'
-			}, (err, reply) => {
-				for (var status in reply.result.places) {
-					geoid = reply.result.places[status].id;
-				}
-				console.log('geoid: ' + geoid);
 			var query = [];
 			T.get('trends/place', {
 				id: '1'
@@ -464,7 +457,6 @@ exports.followTwitter = (req, res, next) => {
 
                     });
                 });
-			});
 			});
             }); 
         }, (60 * 1100 * 15 * follow));
