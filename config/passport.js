@@ -181,7 +181,7 @@ passport.use(new GitHubStrategy({
 var strat = new TwitterStrategy({
   consumerKey: process.env.TWITTER_KEY,
   consumerSecret: process.env.TWITTER_SECRET,
-  callbackURL: 'http://35.237.93.123:8080/auth/twitter/callback',
+  callbackURL: 'http://127.0.0.1:8080/auth/twitter/callback',
   passReqToCallback: true
 }, (req, accessToken, tokenSecret, profile, done) => {
   if (req.user) {
