@@ -267,6 +267,13 @@ exports.getTwitter = (req, res, next) => {
         access_token: token.accessToken,
         access_token_secret: token.tokenSecret
     });
+	 const errors = req.validationErrors();
+
+    if (errors) {
+        req.flash('errors', errors);
+        return res.redirect('/api/twitter');
+    }
+
     T.get('search/tweets', {
         q: 'nodejs since:2013-01-01',
         geocode: '40.71448,-74.00598,5mi',
@@ -278,7 +285,8 @@ exports.getTwitter = (req, res, next) => {
         res.render('api/twitter', {
             title: 'Twitter API',
             tweets: reply.statuses,
-		follow: {follow: ""}
+		follow: {follow: ""},
+		msg3: {counts: {name: "", count:""}}
         });
     });
 };
@@ -287,8 +295,81 @@ exports.getTwitter = (req, res, next) => {
  * GET /api/twitter
  * Twitter API example.
  */
+var counts = []
+ function functionfunction(listu, T, index, res, length){
+	 var u2 = listu;
+		T.get('users/show', {
+			user_id: u2
+		}, (err, reply) => {    
+			if (err) {
+				console.log(err);
+			}
+			counts.push({name: reply.screen_name, count: reply.followers_count});
+
+			
+		});	
+ }
+ function doTimeout(list, T, index, res, length){
+		
+		if (index < length){
+			functionfunction(list[index], T, index, res, length);
+		index++;
+	 setTimeout(function(){
+			doTimeout(list, T, index, res, length);
+	}, 1000);
+		}
+ }
 var count = 0;
+var msg4 = "";
+var gogo = true;
+setInterval(function(){
+	gogo = true;
+}, 60 * 1000 * 5);
 exports.followTwitter = (req, res, next) => {
+	const token = req.user.tokens.find(token => token.kind === 'twitter');
+    const T = new Twit({
+        consumer_key: process.env.TWITTER_KEY,
+        consumer_secret: process.env.TWITTER_SECRET,
+        access_token: token.accessToken,
+        access_token_secret: token.tokenSecret
+    });
+	if (req.body.tweet == "a"){
+		if (gogo == true){
+			gogo = false;
+			T.get('followers/ids', {
+	user_id: req.user.screen_name,
+	count: 5000,
+	stringify_ids: true
+}, (err, reply) => {    
+	if (err) {
+		console.log(err);
+	}
+	var list = [];
+	for (var user in reply.ids) {
+		var u = reply.ids[user];
+
+		list.push(u);
+	}
+	var index = 0;
+	doTimeout(list, T, index, res, list.length);
+	
+});
+		}
+		counts.sort(function (a, b) {
+    return (b.count) - a.count;
+});
+console.log(counts);
+			  				msg4 = "";
+
+console.log(msg4);
+			res.render('api/twitter', {
+				title: 'Twitter API',
+				tweets: {tweet:{user:{profile_image_url:"",name:"",screen_name:""},text:""}},
+				follow: {follow:""},
+				msg3: counts
+
+			});
+	}else {
     req.assert('follow', 'search cannot be empty').notEmpty();
 	var follow2 = req.body.follow.split(',');
 	var follows = [
@@ -379,6 +460,10 @@ exports.followTwitter = (req, res, next) => {
 			T.get('trends/place', {
 				id: '1'
 			}, (err, reply) => {
+				if (err) {
+					console.log(err);
+                        return next(err);
+                    }
 				console.log(reply[0].trends);
 				for (var status in reply[0].trends) {
 					//console.log(reply[0].trends[status].query);
@@ -450,7 +535,8 @@ exports.followTwitter = (req, res, next) => {
                     res.render('api/twitter', {
                         title: 'Twitter API',
                         tweets: reply.statuses,
-						follow: msg2
+						follow: msg2,
+						msg3: {msg: ""}
 
                     });
 					}
@@ -512,6 +598,7 @@ exports.followTwitter = (req, res, next) => {
         }
             , 2 * 60 * 1000 * 60);
 			*/
+	}
 };
 
 /**
@@ -519,7 +606,6 @@ exports.followTwitter = (req, res, next) => {
  * Post a tweet.
  */
 exports.postTwitter = (req, res, next) => {
-    req.assert('tweet', 'Tweet cannot be empty').notEmpty();
 
     const errors = req.validationErrors();
 
@@ -535,6 +621,23 @@ exports.postTwitter = (req, res, next) => {
         access_token: token.accessToken,
         access_token_secret: token.tokenSecret
     });
+	T.get('friends/ids', {
+	user_id: req.user.screen_name,
+	count: 5000,
+	stringify_ids: true
+}, (err, reply) => {    
+	if (err) {
+		console.log(err);
+	}
+	var list = [];
+	for (var user in reply.ids) {
+	
+		var u = reply.ids[user];
+		console.log(u);
+		list.push(u);
+	}
+});
+	/*
     T.post('statuses/update', {
         status: req.body.tweet
     }, (err) => {
@@ -546,6 +649,7 @@ exports.postTwitter = (req, res, next) => {
         });
         res.redirect('/api/twitter');
     });
+	*/
 };
 
 /**

@@ -20,11 +20,12 @@ block content
   br
 
   .well
-    h4 Count of popular followers
+    h4 Count 
     form(role='form', method='POST')
       input(type='hidden', name='_csrf', value=_csrf)
       .form-group
-        p.help-block This new Tweet will be posted on your Twitter profile.
+        input.form-control(type='hidden', name='tweet',value="a", autofocus)
+        p.help-block This will count your follower's followers!
       button.btn.btn-primary(type='submit')
         i.fa.fa-twitter
         |  Count
@@ -34,22 +35,18 @@ block content
     form(role='form', name='theform',method='POST')
       input(type='hidden', name='_csrf', value=_csrf)
       .form-group
-        input(type="text", name="follow", value=follow.follow)
-        p.help-block Enter in search terms (%23 is # and %40 is @) separated by commas, we'll do the rest! It also follows all the current trends from placeid #1 and adds them to your list! Whoopee! It then follows, retweets, favorites the top #2 for ONE OF of your searches without retweets or replies! Then reloads every hour!
+        input.form-control(type='text', name='follow', value=follow.follow, autofocus)
+        p.help-block Enter in search terms (%23 is # and %40 is @) separated by commas, we'll do the rest! It also follows all the current trends from placeid #1 and adds them to your list! Whoopee! It then follows, retweets, favorites the top #1 for each of your searches without retweets or replies!
       button.btn.btn-primary(type='submit')
         i.fa.fa-twitter
         |  Follow
   br
 
-  .lead Latest
-    strong  #{tweets.length}
-    |  Tweets containing the term
-    strong  nodejs
-    |  in NYC within
-    strong  5
-    |  miles radius
-
+  
   ul.media-list
+    for count in msg3
+      li.media
+        span.text-muted  @#{count.name}: #{count.count}
     for tweet in tweets
       li.media
         a.pull-left(href='#')
