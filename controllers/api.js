@@ -277,7 +277,8 @@ exports.getTwitter = (req, res, next) => {
         }
         res.render('api/twitter', {
             title: 'Twitter API',
-            tweets: reply.statuses
+            tweets: reply.statuses,
+		follow: {follow: ""}
         });
     });
 };
@@ -289,22 +290,13 @@ exports.getTwitter = (req, res, next) => {
 var count = 0;
 exports.followTwitter = (req, res, next) => {
     req.assert('follow', 'search cannot be empty').notEmpty();
-    var follows = ["%23cats","%23kitties","%23cute","%40PDATA_Token", "%40xyoraclenetwork", "%40mybitnation", "%40Essentia_One",
-        "%40FriendUPCloud",
-        "%40JoyToken",
-        "%40Skyllz_Platform", "%40Current_CRNC", "%40MomentumToken",
-        "%40equi_capital", 
-        "%40cryptocarz", 
-        "%40GlobalReit01", 
-        "%40SMARC_ICO", 
-        "%40explorequadrant", 
-        "%40ZeroCarbonPrjct", 
-        "%40orvium", 
-        "%40yumeriumtoken", 
-        "%40CountinghouseFd", 
-        "%40FlipNpik", 
-        "%40Blockshipping"
+	var follow2 = req.body.follow.split(',');
+	var follows = [
     ];
+	for (var f in follow2){
+		follows.push(follow2[f]);
+	}
+    console.log(follows);
     const errors = req.validationErrors();
 
             if (errors) {
@@ -320,11 +312,7 @@ exports.followTwitter = (req, res, next) => {
             });
     const user = new User();
     console.log('followers');
-    console.log(req.user.followers);
-    console.log(req.user.followers.length);
     console.log('following');
-    console.log(req.user.following);
-    console.log(req.user.following.length);
     
     for (var follow in follows) {
 
@@ -343,6 +331,7 @@ exports.followTwitter = (req, res, next) => {
                     var u = reply.ids[user];
                     list.push(u);
                 }
+				console.log(list);
                 var newList = req.user.following;
                 for (var id in list){
                     if (newList.indexOf(list[id]) == -1){
@@ -392,7 +381,7 @@ exports.followTwitter = (req, res, next) => {
 			}, (err, reply) => {
 				console.log(reply[0].trends);
 				for (var status in reply[0].trends) {
-					console.log(reply[0].trends[status].query);
+					//console.log(reply[0].trends[status].query);
 					query.push(reply[0].trends[status].query);
 				}
 				for (var q in query){
@@ -402,7 +391,7 @@ exports.followTwitter = (req, res, next) => {
                 T.get('search/tweets', {
                     q: follows[Math.floor(Math.random()*follows.length)] + " -filter:retweets AND -filter:replies",
                     result_type: 'recent',
-                    count: 15
+                    count: 2
                 }, (err, reply) => {
                     if (err) {
                         return next(err);
@@ -419,7 +408,7 @@ exports.followTwitter = (req, res, next) => {
                         }, (err2, reply2) => {
                             if (err2) {
                                 
-                                    //console.log(err2);
+                                    console.log(err2);
                             }
                             console.log(reply2.name);
 
@@ -431,9 +420,9 @@ exports.followTwitter = (req, res, next) => {
                                 id: reply.statuses[status].id_str
                             }, (err2, reply2) => {
                                 if (err2) {
-                                   // console.log(err2);
+                                    console.log(err2);
                                 }
-                              //  console.log(reply2);
+                               console.log(reply2);
 
                             });
 
@@ -443,23 +432,33 @@ exports.followTwitter = (req, res, next) => {
                                 id: reply.statuses[status].id
                             }, (err2, reply2) => {
                                 if (err2) {
-                                  //  console.log(err2);
+                                 console.log(err2);
                                 }
+                               console.log(reply2);
 
                             });
                         }
 
                     }
-                    count++;
+					if (count == 0){
+						var msg = "";
+						for (var f in follows){
+							msg += follows[f] + ","
+						}
+						var msg2 = {follow: msg}
+						msg = msg.substr(0, msg.length-1);
                     res.render('api/twitter', {
                         title: 'Twitter API',
-                        tweets: reply.statuses
+                        tweets: reply.statuses,
+						follow: msg2
 
                     });
+					}
+                    count++;
                 });
 			});
             }); 
-        }, (60 * 1100 * 15 * follow));
+        }, (1 * 1000 * 1 * 1));
     }/*
     var following = req.user.following;
             var followers = req.user.followers;

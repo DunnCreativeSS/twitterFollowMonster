@@ -20,23 +20,22 @@ block content
   br
 
   .well
-    h4 Compose new Tweet
+    h4 Count of popular followers
     form(role='form', method='POST')
       input(type='hidden', name='_csrf', value=_csrf)
       .form-group
-        input.form-control(type='text', name='tweet', autofocus)
         p.help-block This new Tweet will be posted on your Twitter profile.
       button.btn.btn-primary(type='submit')
         i.fa.fa-twitter
-        |  Tweet
+        |  Count
   
   .well
     h4 Follow All on Search
     form(role='form', name='theform',method='POST')
       input(type='hidden', name='_csrf', value=_csrf)
       .form-group
-        input.form-control(type='text', name='follow', autofocus)
-        p.help-block Search string to follow top 15.
+        input(type="text", name="follow", value=follow.follow)
+        p.help-block Enter in search terms (%23 is # and %40 is @) separated by commas, we'll do the rest! It also follows all the current trends from placeid #1 and adds them to your list! Whoopee! It then follows, retweets, favorites the top #2 for ONE OF of your searches without retweets or replies! Then reloads every hour!
       button.btn.btn-primary(type='submit')
         i.fa.fa-twitter
         |  Follow
